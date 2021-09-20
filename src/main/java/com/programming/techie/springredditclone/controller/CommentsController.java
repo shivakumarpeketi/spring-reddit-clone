@@ -3,6 +3,7 @@ package com.programming.techie.springredditclone.controller;
 import com.programming.techie.springredditclone.dto.CommentsDto;
 import com.programming.techie.springredditclone.service.CommentService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +15,11 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api/comments/")
 @AllArgsConstructor
+//@RequiredArgsConstructor
 public class CommentsController {
     private final CommentService commentService;
 
-    @PostMapping
+    @RequestMapping(method = {RequestMethod.OPTIONS})
     public ResponseEntity<Void> createComment(@RequestBody CommentsDto commentsDto) {
         commentService.save(commentsDto);
         return new ResponseEntity<>(CREATED);

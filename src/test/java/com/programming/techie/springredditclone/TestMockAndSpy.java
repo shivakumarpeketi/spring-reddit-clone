@@ -10,19 +10,19 @@ import org.mockito.*;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestMockAndSpy {
     @Spy
     A spyA = new A();
 
-    @Mock
+//    @Mock
+@Spy
     B mockB = new B();
 
     @InjectMocks
-    private A mockA;
+    private A injectedA;
 
     @BeforeEach
     public void init() {
@@ -31,16 +31,17 @@ class TestMockAndSpy {
 
     @Test
     public void testMockA() throws IOException {
-        //given
-//        A mockA = Mockito.mock(A.class);
+        A mockA = Mockito.mock(A.class);
 //        Mockito.when(mockB.fooB()).thenReturn("Manually sending data through Mock");
+        Mockito.doReturn("Manually sending data through Mock").when(mockB);
 
         //when
-        String result1 = mockA.foo1();
-//        String result2 = mockA.foo2();
+        String result1 = injectedA.foo1();
+        String result2 = mockB.fooB();
 
         //then
         assertEquals("RealString_1", result1);
+        assertEquals("Manually sending data through Mock", result2);
 //        assertEquals(null, result2);
 
         //Case 2
@@ -63,19 +64,22 @@ class TestMockAndSpy {
         //Mockito.when(spyA.foo1()).thenReturn("MockedString");
 
         //when
-        String result1 = spyA.foo1();
+        String result1 = injectedA.foo1();
         String result2 = spyA.foo2();
 
         //then
-        assertNotEquals("MockedString", result1);
-        assertEquals("RealString_2", result2);
+        assertNotEquals("Mock test", result1);
+        @("RealString_2", result2);
 
         //Case 2
         //when
         spyA.foo3();
 
         //then
-        verify(mockA).foo3();
+        verify(spyA, times(2)).foo4();
+        assertThrows(ArithmeticException.class, () -> {
+            spyA.foo5("1", "0");
+        });
 //        verify(spyA).foo4();
     }
 

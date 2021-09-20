@@ -16,6 +16,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query
     List<Post> findByUser(User user);
 
-    @Procedure(name = "PostByUserFirstAndLastName")
-    List<Post> findByFirstAndLastNames(String fName, String lName);
+    /*@Procedure(name = "PostByUserFirstAndLastName")
+    List<Post> findByFirstAndLastNames(String fName, String lName);*/
 }
